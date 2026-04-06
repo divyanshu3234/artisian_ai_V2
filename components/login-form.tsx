@@ -1,20 +1,10 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Sparkles } from "lucide-react";
 
 export function LoginForm({
   className,
@@ -33,13 +23,19 @@ export function LoginForm({
     setError(null);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { error, data } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       if (error) throw error;
-      // Update this route to redirect to an authenticated route. The user already has an active session.
-      router.push("/protected");
+      
+      // Role routing!
+      const role = data.user?.user_metadata?.role;
+      if (role === 'seller') {
+        router.push("/dashboard");
+      } else {
+        router.push("/market"); // Buyers go to Market
+      }
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {
@@ -48,63 +44,65 @@ export function LoginForm({
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>
-            Enter your email below to login to your account
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleLogin}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <Link
-                    href="/auth/forgot-password"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </Link>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Logging in..." : "Login"}
-              </Button>
+    <div className={`flex flex-col w-full max-w-md ${className || ""}`} {...props}>
+      <div className="bg-surface-container rounded-3xl p-8 border ghost-border shadow-2xl relative overflow-hidden">
+        <div className="absolute -top-10 -right-10 text-primary opacity-5">
+          <Sparkles className="w-40 h-40" />
+        </div>
+
+        <div className="mb-8 relative z-10">
+          <h2 className="text-3xl font-serif font-bold text-foreground">Welcome Back</h2>
+          <p className="text-muted-foreground mt-2 font-sans">Login to access your gallery.</p>
+        </div>
+
+        <form onSubmit={handleLogin} className="space-y-6 relative z-10">
+          <div className="space-y-6">
+            <div>
+              <label className="text-xs uppercase tracking-widest text-muted-foreground font-bold mb-2 block">Email</label>
+              <input
+                type="email"
+                required
+                className="w-full bg-transparent border-b border-outline-variant/30 focus:border-primary transition-colors text-foreground py-2 outline-none text-lg"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
-            <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <Link
-                href="/auth/sign-up"
-                className="underline underline-offset-4"
-              >
-                Sign up
-              </Link>
+            
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-xs uppercase tracking-widest text-muted-foreground font-bold">Password</label>
+                <Link href="/auth/forgot-password" className="text-xs text-primary hover:underline">
+                  Forgot?
+                </Link>
+              </div>
+              <input
+                type="password"
+                required
+                className="w-full bg-transparent border-b border-outline-variant/30 focus:border-primary transition-colors text-foreground py-2 outline-none text-lg"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
-          </form>
-        </CardContent>
-      </Card>
+          </div>
+
+          {error && <p className="text-sm text-destructive font-bold">{error}</p>}
+          
+          <button 
+            type="submit" 
+            disabled={isLoading}
+            className="w-full mt-8 bg-primary-gradient text-white py-4 rounded-full font-serif font-bold text-lg shadow-lg active:scale-95 transition-all disabled:opacity-50"
+          >
+            {isLoading ? "Authenticating..." : "Login to Portal"}
+          </button>
+          
+          <div className="mt-6 text-center text-sm text-muted-foreground">
+            Don&apos;t have an account?{" "}
+            <Link href="/auth/sign-up" className="text-[#FFB300] font-bold hover:underline">
+              Register
+            </Link>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

@@ -4,57 +4,64 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    --background: #fcf9f5;
+    --foreground: #1c1c19;
+    --card: #f6f3ef;
+    --card-foreground: #1c1c19;
+    --popover: #fcf9f5;
+    --popover-foreground: #1c1c19;
+    --primary: #33455a;
+    --primary-foreground: #ffffff;
+    --secondary: #8e4c41;
+    --secondary-foreground: #ffffff;
+    --muted: #f6f3ef;
+    --muted-foreground: #44474c;
+    --accent: #f0ede9;
+    --accent-foreground: #1c1c19;
+    --destructive: #ba1a1a;
+    --destructive-foreground: #ffffff;
+    --border: #c4c6cd;
+    --input: #c4c6cd;
+    --ring: #33455a;
+    --surface: #fcf9f5;
+    --surface-container-lowest: #ffffff;
+    --surface-container-low: #f6f3ef;
+    --surface-container: #f0ede9;
+    --surface-container-high: #ebe8e4;
+    --surface-container-highest: #e5e2de;
+    --surface-tint: #4e6076;
+    --tertiary: #59400e;
   }
+
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 9%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-    --accent: 0 0% 14.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 0 0% 83.1%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --background: #131313;
+    --foreground: #e6e2dd;
+    --card: #1c1c19;
+    --card-foreground: #e6e2dd;
+    --popover: #131313;
+    --popover-foreground: #e6e2dd;
+    --primary: #a7c8fc;
+    --primary-foreground: #003061;
+    --secondary: #ffb4a5;
+    --secondary-foreground: #5a1b12;
+    --muted: #1c1c19;
+    --muted-foreground: #c4c6cd;
+    --accent: #2c2c2a;
+    --accent-foreground: #e6e2dd;
+    --destructive: #ffb4ab;
+    --destructive-foreground: #690005;
+    --border: #44474c;
+    --input: #44474c;
+    --ring: #a7c8fc;
+    --surface: #131313;
+    --surface-container-lowest: #0c0c0c;
+    --surface-container-low: #1c1c1b;
+    --surface-container: #212120;
+    --surface-container-high: #2b2b2a;
+    --surface-container-highest: #363635;
+    --surface-tint: #a7c8fc;
+    --tertiary: #eabe73;
   }
 }
 
@@ -63,11 +70,30 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
   }
 }
 
-/* global.css or tailwind.config.css */
+@layer components {
+  /* Ghost Border Fallback - Utility */
+  .ghost-border {
+    border: 1px solid rgba(196, 198, 205, 0.15); /* outline-variant at 15% */
+  }
+
+  /* Glassmorphism for floating nav or modal overlays */
+  .glass-overlay {
+    background: var(--surface);
+    opacity: 0.8;
+    backdrop-filter: blur(24px);
+  }
+
+  /* Gradient UI for primary actions */
+  .bg-primary-gradient {
+    background: linear-gradient(135deg, #33455a 0%, #4b5d73 100%);
+  }
+}
+
+/* global.css */
 ::-webkit-scrollbar {
   display: none;
 }

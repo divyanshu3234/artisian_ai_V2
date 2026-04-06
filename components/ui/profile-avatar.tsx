@@ -67,7 +67,7 @@ const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ size = 35 }) => {
         <div className="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-900 shadow-md rounded-md border border-gray-200 dark:border-gray-700 animate-fadeIn">
           <button
             onClick={() => {
-              router.push("/protected/profile");
+              router.push("/profile");
               setOpen(false);
             }}
             className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition"

@@ -1,23 +1,28 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Noto_Serif, Manrope } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { Toaster } from 'react-hot-toast'
 import { Suspense } from "react"
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
 
 export const metadata: Metadata = {
-  title: "Artisan AI — Seller Landing",
-  description: "An artistic, focused landing experience for sellers using Artisan AI.",
+  title: "Artisan AI — The Genie Hub",
+  description: "An artistic, focused dashboard experience for sellers using Artisan AI.",
 }
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  display: "swap",
+const notoSerif = Noto_Serif({
+  variable: "--font-noto-serif",
   subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
+});
+
+const manrope = Manrope({
+  variable: "--font-manrope",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 export default function RootLayout({
@@ -27,12 +32,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased`}>
+      <body className={`${notoSerif.variable} ${manrope.variable} font-sans antialiased`}>
         <Toaster position='top-center' />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
-          enableSystem
+          enableSystem={true}
           disableTransitionOnChange
         >
           <Suspense fallback={null}>{children}</Suspense>

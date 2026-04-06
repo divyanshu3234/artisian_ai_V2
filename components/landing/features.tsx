@@ -1,44 +1,44 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-
-const features = [
-  {
-    title: "Voice-to-listing",
-    body: "Speak in your language. We turn your story into polished, multilingual product listings.",
-  },
-  {
-    title: "Fair pricing guidance",
-    body: "Get market-aware suggestions that respect your craft and adjust with demand and seasonality.",
-  },
-  {
-    title: "Auto-translate & polish",
-    body: "Reach buyers globally with translations that keep cultural nuance and authenticity.",
-  },
-  {
-    title: "Ready-to-post content",
-    body: "Generate captions and visuals that spotlight process, provenance, and technique.",
-  },
-]
+import React from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Sparkles, Globe, MapPin } from "lucide-react";
 
 export function Features() {
   return (
-    <section id="features" className="mx-auto w-full max-w-6xl px-4 py-12 md:py-20">
-      <header className="mx-auto max-w-2xl text-center">
-        <h2 className="text-balance text-2xl font-semibold md:text-3xl">Tools designed for makers</h2>
-        <p className="mt-3 text-muted-foreground leading-relaxed">
-          Everything you need to tell your story beautifully—and sell confidently.
-        </p>
-      </header>
+    <section className="py-24 px-6 md:px-8 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <Card className="bg-surface-container border-outline-variant/30">
+          <CardHeader>
+            <Sparkles className="w-8 h-8 text-primary mb-4" />
+            <CardTitle>AI Curator</CardTitle>
+            <CardDescription>Smart insights to connect your work with global trends.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">Logistics and supply chain made effortless.</p>
+          </CardContent>
+        </Card>
+        
+        <Card className="bg-surface-container border-outline-variant/30">
+          <CardHeader>
+            <Globe className="w-8 h-8 text-[#FFB300] mb-4" />
+            <CardTitle>Global Marketplace</CardTitle>
+            <CardDescription>Reach buyers everywhere without middleman friction.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">List your products and unlock dual-view dashboards.</p>
+          </CardContent>
+        </Card>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 md:mt-12">
-        {features.map((f) => (
-          <Card key={f.title} className="border-muted">
-            <CardHeader>
-              <CardTitle className="text-base">{f.title}</CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm text-muted-foreground leading-relaxed">{f.body}</CardContent>
-          </Card>
-        ))}
+        <Card className="bg-surface-container border-outline-variant/30">
+          <CardHeader>
+            <MapPin className="w-8 h-8 text-secondary mb-4" />
+            <CardTitle>Heritage Velocity</CardTitle>
+            <CardDescription>Real-time heatmaps of craft demand natively mapped.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">See exactly where regional demand is soaring.</p>
+          </CardContent>
+        </Card>
       </div>
     </section>
-  )
+  );
 }
