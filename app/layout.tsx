@@ -4,6 +4,7 @@ import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { Toaster } from 'react-hot-toast'
 import { Suspense } from "react"
+import { ProfileProvider } from "@/contexts/ProfileContexts"
 
 
 export const metadata: Metadata = {
@@ -40,7 +41,9 @@ export default function RootLayout({
           enableSystem={true}
           disableTransitionOnChange
         >
-          <Suspense fallback={null}>{children}</Suspense>
+          <ProfileProvider>
+            <Suspense fallback={null}>{children}</Suspense>
+          </ProfileProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -2,18 +2,115 @@
 
 import Image from "next/image";
 import toast from "react-hot-toast";
+import { useState, useEffect } from "react";
 import TopNavbar from "@/components/layout/top-nav";
 import BottomNavbar from "@/components/layout/bottom-nav";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { useProfile } from "@/contexts/ProfileContexts";
+import UploadPicture from "@/components/ui/uploadPicture";
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalTrigger,
+  ModalDoneButton,
+} from "@/components/ui/animated-modal";
 import { 
-  Bell, UserCircle, Camera, Pen, MapPin, Palette, 
+  Bell, UserCircle, Camera, Pen, MapPin, Palette,
   Quote, Box, Star, Save, LogOut, Globe, Share2 
 } from 'lucide-react';
 
 export default function ProfilePage() {
   const router = useRouter();
+  const supabase = createClient();
+  const { profilePicture, setProfilePicture } = useProfile();
   
-  const handleLogout = () => {
+  const [profile, setProfile] = useState({
+    name: "Artisan",
+    location: "",
+    primary_craft: "",
+    story: ""
+  });
+  const [isSaving, setIsSaving] = useState(false);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setProfile({
+          name: user.user_metadata?.first_name || user.user_metadata?.name || user.email?.split('@')[0] || "Artisan",
+          location: user.user_metadata?.location || "Khurja, Uttar Pradesh, India",
+          primary_craft: user.user_metadata?.primary_craft || "Blue Pottery & Terracotta Sculpting",
+          story: user.user_metadata?.story || `"Born into a lineage of potters spanning seven generations in Khurja, I see clay not as dirt, but as the memory of the earth."`
+        });
+      }
+    };
+    fetchProfile();
+  }, [supabase]);
+
+  const handleSaveProfile = async () => {
+    setIsSaving(true);
+    try {
+      const { error } = await supabase.auth.updateUser({
+        data: {
+          first_name: profile.name,
+          location: profile.location,
+          primary_craft: profile.primary_craft,
+          story: profile.story
+        }
+      });
+      if (error) throw error;
+      toast.success("Profile saved securely to Supabase!");
+    } catch (err: any) {
+      toast.error("Failed to save: " + err.message);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleUploadAvatar = async () => {
+    if (!avatarFile) return;
+    try {
+      toast.loading("Uploading picture...", { id: "avatar-upload" });
+
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Unauthenticated");
+
+      // Upload to Storage
+      const fileName = `avatars/${Date.now()}-${avatarFile.name}`;
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from("product-photos")
+        .upload(fileName, avatarFile);
+
+      if (uploadError) throw uploadError;
+
+      const { data: publicUrlData } = supabase.storage
+        .from("product-photos")
+        .getPublicUrl(uploadData.path);
+      const photoUrl = publicUrlData.publicUrl;
+
+      // Update sellers table securely
+      await supabase.from("sellers").update({ profile_picture: photoUrl }).eq("user_id", user.id);
+
+      // Update user metadata 
+      await supabase.auth.updateUser({
+        data: { avatar_url: photoUrl }
+      });
+
+      setProfilePicture(photoUrl);
+
+      toast.success("Profile picture updated!", { id: "avatar-upload" });
+      setAvatarFile(null); // reset
+    } catch (err: any) {
+      toast.error("Failed to upload: " + err.message, { id: "avatar-upload" });
+    }
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     toast.success("Successfully logged out");
     router.push("/");
   };
@@ -40,17 +137,32 @@ export default function ProfilePage() {
             <section className="bg-surface-container-low rounded-xl p-1 overflow-hidden shadow-ambient">
               <div className="relative group">
                 <Image 
-                  className="w-full aspect-[4/3] object-cover rounded-xl grayscale hover:grayscale-0 transition-all duration-700" 
+                  className="w-full aspect-[4/3] object-cover rounded-xl transition-all duration-700" 
                   alt="Professional portrait of a senior Indian artisan" 
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHWTTicrkwdlHSFAhD1EVIVrCRMgeUc8HBfOQuW4de8qDK2yCWTy1JXpdPXyceNkbGnlD0AEVXQvrda3WQ6kzx335FPqkOmP_JPllGLtVNP2YDjrTts1oelvU0-NKnjbdPeQzej96BoDlxtKfL1gD59zlfaKzr5U9tKSp_aDd6W70GdIWl8xkx1YTEo4T9KQ1kdCZaGPSjnA1UrfSthXhOYkHw3RWNXaF-n4UH_daIT1B4Y_2JdJfP1twJCjWIejqeBYcYQycnn4mC"
+                  src={profilePicture || "https://lh3.googleusercontent.com/aida-public/AB6AXuBHWTTicrkwdlHSFAhD1EVIVrCRMgeUc8HBfOQuW4de8qDK2yCWTy1JXpdPXyceNkbGnlD0AEVXQvrda3WQ6kzx335FPqkOmP_JPllGLtVNP2YDjrTts1oelvU0-NKnjbdPeQzej96BoDlxtKfL1gD59zlfaKzr5U9tKSp_aDd6W70GdIWl8xkx1YTEo4T9KQ1kdCZaGPSjnA1UrfSthXhOYkHw3RWNXaF-n4UH_daIT1B4Y_2JdJfP1twJCjWIejqeBYcYQycnn4mC"}
                   width={800}
                   height={600}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-8">
-                  <button onClick={() => toast.success("Camera access requested!")} className="flex items-center gap-3 bg-primary-gradient text-white px-6 py-3 rounded-full font-bold hover:opacity-90 active:scale-95 transition-all">
-                    <Camera className="w-5 h-5" />
-                    Open Camera (कैमरा खोलें)
-                  </button>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end justify-start p-8">
+                  <Modal>
+                    <ModalTrigger className="flex items-center gap-3 bg-primary-gradient text-white px-6 py-3 rounded-full font-bold hover:opacity-90 active:scale-95 transition-all shadow-[0_0_15px_rgba(226,114,91,0.5)]">
+                      <Camera className="w-5 h-5" />
+                      Set Avatar Picture (कैमरा खोलें)
+                    </ModalTrigger>
+                    <ModalBody>
+                      <ModalContent>
+                        <h2 className="text-2xl font-serif font-bold text-foreground mb-6 text-center">
+                          Upload Profile Picture
+                        </h2>
+                        <div className="flex justify-center p-4">
+                          <UploadPicture onFileSelect={(file) => setAvatarFile(file)} />
+                        </div>
+                      </ModalContent>
+                      <ModalFooter className="gap-4">
+                        <ModalDoneButton className="bg-primary hover:bg-primary-container text-white" onSubmit={handleUploadAvatar} />
+                      </ModalFooter>
+                    </ModalBody>
+                  </Modal>
                 </div>
               </div>
             </section>
@@ -60,7 +172,12 @@ export default function ProfilePage() {
               <div className="group border-b border-outline-variant/30 py-4 flex justify-between items-end hover:border-secondary transition-colors">
                 <div className="space-y-1 w-full">
                   <label className="text-xs uppercase tracking-widest text-[#FFB300] font-semibold">Artisan Name / नाम</label>
-                  <input className="bg-transparent border-none p-0 text-3xl font-serif font-extrabold text-foreground focus:ring-0 w-full outline-none" type="text" defaultValue="Rajesh Kumar Prajapati" />
+                  <input 
+                    className="bg-transparent border-none p-0 text-3xl font-serif font-extrabold text-foreground focus:ring-0 w-full outline-none" 
+                    type="text" 
+                    value={profile.name}
+                    onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+                  />
                 </div>
                 <Pen className="text-border group-hover:text-secondary mb-2 w-5 h-5 flex-shrink-0" />
               </div>
@@ -68,15 +185,25 @@ export default function ProfilePage() {
               <div className="group border-b border-outline-variant/30 py-4 flex justify-between items-end hover:border-secondary transition-colors">
                 <div className="space-y-1 w-full">
                   <label className="text-xs uppercase tracking-widest text-[#FFB300] font-semibold">Location / स्थान</label>
-                  <input className="bg-transparent border-none p-0 text-xl font-sans text-foreground focus:ring-0 w-full outline-none" type="text" defaultValue="Khurja, Uttar Pradesh, India" />
+                  <input 
+                    className="bg-transparent border-none p-0 text-xl font-sans text-foreground focus:ring-0 w-full outline-none" 
+                    type="text" 
+                    value={profile.location}
+                    onChange={(e) => setProfile({ ...profile, location: e.target.value })}
+                  />
                 </div>
                 <MapPin className="text-border group-hover:text-secondary mb-2 w-5 h-5 flex-shrink-0" />
               </div>
 
               <div className="group border-b border-outline-variant/30 py-4 flex justify-between items-end hover:border-secondary transition-colors">
-                <div className="space-y-1 w-full">
+                <div className="space-y-1 w-full relative">
                   <label className="text-xs uppercase tracking-widest text-[#FFB300] font-semibold">Primary Craft / मुख्य शिल्प</label>
-                  <input className="bg-transparent border-none p-0 text-xl font-sans text-foreground focus:ring-0 w-full outline-none" type="text" defaultValue="Blue Pottery & Terracotta Sculpting" />
+                  <input 
+                    className="bg-transparent border-none p-0 text-xl font-sans text-foreground focus:ring-0 w-full outline-none" 
+                    type="text" 
+                    value={profile.primary_craft}
+                    onChange={(e) => setProfile({ ...profile, primary_craft: e.target.value })}
+                  />
                 </div>
                 <Palette className="text-border group-hover:text-secondary mb-2 w-5 h-5 flex-shrink-0" />
               </div>
@@ -88,12 +215,18 @@ export default function ProfilePage() {
             {/* My Story Section */}
             <section className="bg-surface-container-low p-10 rounded-xl relative overflow-hidden group">
               <Quote className="absolute -top-4 -right-4 w-32 h-32 opacity-5 text-secondary" />
-              <h3 className="text-2xl font-serif font-bold text-foreground mb-6 flex items-center gap-2">
+              <h3 className="text-2xl font-serif font-bold text-foreground mb-6 flex items-center gap-2 relative z-10">
                 My Story <span className="text-muted-foreground">/ मेरी कहानी</span>
               </h3>
-              <p className="text-lg leading-relaxed text-muted-foreground font-sans italic">
-                &quot;Born into a lineage of potters spanning seven generations in Khurja, I see clay not as dirt, but as the memory of the earth. Artisan AI helps me translate my ancestors&apos; patterns into the language of the modern world, ensuring our hands&apos; labor finds homes in distant lands.&quot;
-              </p>
+              <div className="relative z-10 group/story border-b border-transparent hover:border-outline-variant/30 pb-2 transition-colors">
+                <textarea 
+                  className="bg-transparent text-lg leading-relaxed text-muted-foreground font-sans italic w-full resize-none outline-none overflow-hidden" 
+                  rows={4}
+                  value={profile.story}
+                  onChange={(e) => setProfile({ ...profile, story: e.target.value })}
+                />
+                <Pen className="absolute right-0 bottom-4 text-transparent group-hover/story:text-border w-4 h-4 transition-colors" />
+              </div>
             </section>
 
             {/* Stats Bento Grid */}
@@ -134,9 +267,9 @@ export default function ProfilePage() {
 
             {/* Global Actions */}
             <div className="flex flex-col gap-4 pt-4">
-              <button onClick={() => toast.success("Profile saved successfully.")} className="w-full py-5 bg-primary-gradient text-white text-lg font-bold rounded-xl shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-3">
+              <button disabled={isSaving} onClick={handleSaveProfile} className="w-full py-5 bg-primary-gradient text-white text-lg font-bold rounded-xl shadow-lg active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-50">
                 <Save className="w-5 h-5" />
-                Save Profile Changes
+                {isSaving ? "Saving..." : "Save Profile Changes"}
               </button>
               <button onClick={handleLogout} className="w-full py-4 bg-transparent ghost-border hover:border-destructive hover:text-destructive text-foreground transition-all rounded-xl font-semibold flex items-center justify-center gap-3">
                 <LogOut className="w-5 h-5" />
