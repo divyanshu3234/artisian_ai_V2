@@ -5,6 +5,7 @@ import "./globals.css";
 import { Toaster } from 'react-hot-toast'
 import { Suspense } from "react"
 import { ProfileProvider } from "@/contexts/ProfileContexts"
+import { CartProvider } from "@/contexts/CartContext"
 
 
 export const metadata: Metadata = {
@@ -42,7 +43,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ProfileProvider>
-            <Suspense fallback={null}>{children}</Suspense>
+            <CartProvider>
+              <Suspense fallback={null}>{children}</Suspense>
+            </CartProvider>
           </ProfileProvider>
         </ThemeProvider>
       </body>

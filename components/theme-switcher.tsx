@@ -27,9 +27,9 @@ export function ThemeSwitcher() {
       aria-label="Toggle Dark Mode"
     >
       {theme === "dark" ? (
-        <Sun className="w-4 h-4 text-primary" />
+        <Sun className="w-4 h-4 text-[#FFB300]" />
       ) : (
-        <Moon className="w-4 h-4 text-[#131313]" />
+        <Moon className="w-4 h-4 text-primary" />
       )}
     </button>
   );

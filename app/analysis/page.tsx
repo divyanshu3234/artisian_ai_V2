@@ -52,10 +52,16 @@ export default function AnalysisPage() {
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                     <Tooltip 
-                      cursor={{ fill: 'rgba(255,180,165,0.1)' }} 
-                      contentStyle={{ backgroundColor: '#131313', border: '1px solid rgba(226,114,91,0.3)', borderRadius: '16px' }}
+                      cursor={{ fill: 'var(--accent)' }} 
+                      contentStyle={{ 
+                        backgroundColor: 'var(--popover)', 
+                        borderColor: 'var(--border)', 
+                        borderRadius: '16px',
+                        color: 'var(--popover-foreground)'
+                      }}
+                      itemStyle={{ color: 'var(--primary)' }}
                     />
-                    <Bar dataKey="growth" fill="#ffb4a5" radius={[100, 100, 0, 0]} className="hover:opacity-80 transition-opacity" />
+                    <Bar dataKey="growth" fill="var(--secondary)" radius={[100, 100, 0, 0]} className="hover:opacity-80 transition-opacity" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>

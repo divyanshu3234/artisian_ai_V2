@@ -43,7 +43,7 @@ const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ size = 35 }) => {
       {/* Profile Button */}
       <button
         onClick={() => setOpen(!open)}
-        className="rounded-full border border-gray-300 hover:ring-2 hover:ring-blue-500 transition-all"
+        className="rounded-full border border-border hover:ring-2 hover:ring-primary transition-all"
         style={{ width: size, height: size, overflow: "hidden" }}
       >
         {profilePicture ? (
@@ -57,27 +57,27 @@ const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ size = 35 }) => {
         ) : (
           <div
             style={{ width: size, height: size }}
-            className="rounded-full bg-gray-300 dark:bg-gray-700"
+            className="rounded-full bg-surface-container"
           />
         )}
       </button>
 
       {/* Dropdown Menu */}
       {open && (
-        <div className="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-900 shadow-md rounded-md border border-gray-200 dark:border-gray-700 animate-fadeIn">
+        <div className="absolute right-0 mt-2 w-44 bg-popover shadow-md rounded-md border border-border animate-fadeIn">
           <button
             onClick={() => {
               router.push("/profile");
               setOpen(false);
             }}
-            className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+            className="w-full px-4 py-2 text-left text-sm hover:bg-surface-container transition"
           >
             Profile
           </button>
 
           <button
             onClick={handleLogout}
-            className="w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+            className="w-full px-4 py-2 text-left text-sm hover:bg-surface-container transition"
           >
             Logout
           </button>

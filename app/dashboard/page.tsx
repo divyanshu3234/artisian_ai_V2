@@ -221,7 +221,7 @@ export default function DashboardPage() {
             <Modal>
               <ModalTrigger className="group flex items-center gap-4 bg-primary-gradient text-white px-8 py-5 rounded-full shadow-lg shadow-primary/20 active:scale-95 transition-transform border-none">
                 <div className="bg-[#FFB300] p-3 rounded-full shadow-[0_0_15px_rgba(255,179,0,0.4)] group-hover:scale-110 transition-transform">
-                  <Mic className="text-[#131313]" fill="currentColor" />
+                  <Mic className="text-black" fill="currentColor" />
                 </div>
                 <span className="font-serif font-bold text-lg tracking-tight">Record Your Story</span>
               </ModalTrigger>
@@ -338,7 +338,7 @@ export default function DashboardPage() {
                       <h4 className="font-serif font-bold text-lg text-foreground line-clamp-1">{product.name}</h4>
                       <p className="text-xs text-muted-foreground line-clamp-2 mt-1">{product.description || "No description provided."}</p>
                     </div>
-                    <Share2 className="text-[#FFB300] cursor-pointer shrink-0" />
+                    <Share2 className="text-secondary cursor-pointer shrink-0" />
                   </div>
                   <div className="flex gap-2 pt-4 border-t border-outline-variant/10">
                     <button onClick={() => toast.success('Edit mode unlocked.')} className="flex-1 bg-primary/10 text-primary py-3 rounded-xl font-bold text-sm tracking-tight active:scale-95 transition-all hover:bg-primary/20">Edit Item</button>

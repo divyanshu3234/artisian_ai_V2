@@ -31,7 +31,11 @@
     --surface-container-high: #ebe8e4;
     --surface-container-highest: #e5e2de;
     --surface-tint: #4e6076;
+    --surface-glass: rgba(252, 249, 245, 0.8);
     --tertiary: #59400e;
+    
+    --primary-gradient-start: #E2725B;
+    --primary-gradient-end: #FFB4A5;
   }
 
   .dark {
@@ -60,8 +64,12 @@
     --surface-container: #212120;
     --surface-container-high: #2b2b2a;
     --surface-container-highest: #363635;
+    --surface-glass: rgba(19, 19, 19, 0.8);
     --surface-tint: #a7c8fc;
     --tertiary: #eabe73;
+
+    --primary-gradient-start: #1e2a38;
+    --primary-gradient-end: #33455a;
   }
 }
 
@@ -77,19 +85,19 @@
 @layer components {
   /* Ghost Border Fallback - Utility */
   .ghost-border {
-    border: 1px solid rgba(196, 198, 205, 0.15); /* outline-variant at 15% */
+    border: 1px solid var(--border);
+    opacity: 0.8;
   }
 
   /* Glassmorphism for floating nav or modal overlays */
   .glass-overlay {
-    background: var(--surface);
-    opacity: 0.8;
+    background: var(--surface-glass);
     backdrop-filter: blur(24px);
   }
 
   /* Gradient UI for primary actions */
   .bg-primary-gradient {
-    background: linear-gradient(135deg, #33455a 0%, #4b5d73 100%);
+    background: linear-gradient(135deg, var(--primary-gradient-start) 0%, var(--primary-gradient-end) 100%);
   }
 }
 

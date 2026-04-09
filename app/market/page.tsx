@@ -14,6 +14,7 @@ import {
 import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import { fallbackListings } from "@/lib/data/fallbacks";
+import { useCart } from "@/contexts/CartContext";
 
 export default function MarketPage() {
   const supabase = createClient();
@@ -34,6 +35,7 @@ export default function MarketPage() {
   }, []);
 
   const router = useRouter();
+  const { addToCart } = useCart();
   const allFeed = [...products, ...fallbackListings];
 
   return (
@@ -58,13 +60,13 @@ export default function MarketPage() {
           <section className="lg:col-span-7 bg-surface-container rounded-[32px] overflow-hidden relative flex flex-col shadow-sm border border-outline-variant/10">
             <div className="p-8 absolute top-0 left-0 z-10 w-full pointer-events-none flex justify-between">
               <div className="bg-surface/40 backdrop-blur-md border border-outline-variant/30 inline-flex items-center px-4 py-2 rounded-full pointer-events-auto">
-                <span className="w-2 h-2 rounded-full bg-[#FFB300] mr-2"></span>
-                <span className="text-xs font-bold tracking-widest uppercase text-[#FFB300]">Live Craft Velocity</span>
+                <span className="w-2 h-2 rounded-full bg-secondary mr-2"></span>
+                <span className="text-xs font-bold tracking-widest uppercase text-secondary">Live Craft Velocity</span>
               </div>
             </div>
 
             {/* Simulated Map Component */}
-            <div className="flex-1 w-full bg-[#1c1b1b] relative overflow-hidden group/map cursor-crosshair">
+            <div className="flex-1 w-full bg-surface-container-highest relative overflow-hidden group/map cursor-crosshair">
               <Image 
                 className="w-full h-full object-cover opacity-40 mix-blend-luminosity duration-1000 group-hover/map:opacity-60 transition-opacity group-hover/map:scale-105" 
                 alt="Map of India with glowing craft demand centers" 
@@ -79,7 +81,7 @@ export default function MarketPage() {
                   <div className="relative w-4 h-4 bg-primary rounded-full border-2 border-surface"></div>
                 </div>
                 <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-surface-container-high p-3 rounded-xl shadow-2xl min-w-[140px] border border-outline-variant/30 opacity-0 group-hover:opacity-100 transition-all z-20 pointer-events-none">
-                  <p className="text-[10px] uppercase tracking-widest text-[#FFB300] font-bold">Jaipur</p>
+                  <p className="text-[10px] uppercase tracking-widest text-secondary font-bold">Jaipur</p>
                   <p className="text-xs text-foreground mt-1">Blue Pottery Demand</p>
                   <div className="mt-2 h-1 w-full bg-surface-container-lowest rounded-full overflow-hidden">
                     <div className="h-full bg-primary w-[85%]"></div>
@@ -91,13 +93,14 @@ export default function MarketPage() {
               <div className="absolute top-[45%] left-[55%] group cursor-pointer">
                 <div className="relative flex items-center justify-center">
                   <div className="absolute w-16 h-16 bg-[#FFB300]/20 rounded-full animate-pulse"></div>
-                  <div className="relative w-4 h-4 bg-[#FFB300] rounded-full border-2 border-surface"></div>
+                  <div className="absolute w-16 h-16 bg-secondary/20 rounded-full animate-pulse"></div>
+                  <div className="relative w-4 h-4 bg-secondary rounded-full border-2 border-surface"></div>
                 </div>
                 <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-surface-container-high p-3 rounded-xl shadow-2xl min-w-[140px] border border-outline-variant/30 opacity-0 group-hover:opacity-100 transition-all z-20 pointer-events-none">
-                  <p className="text-[10px] uppercase tracking-widest text-[#FFB300] font-bold">Varanasi</p>
+                  <p className="text-[10px] uppercase tracking-widest text-secondary font-bold">Varanasi</p>
                   <p className="text-xs text-foreground mt-1">Silk Brocade Trends</p>
                   <div className="mt-2 h-1 w-full bg-surface-container-lowest rounded-full overflow-hidden">
-                    <div className="h-full bg-[#FFB300] w-[92%]"></div>
+                    <div className="h-full bg-secondary w-[92%]"></div>
                   </div>
                 </div>
               </div>
@@ -109,7 +112,7 @@ export default function MarketPage() {
                   <div className="relative w-4 h-4 bg-indigo-400 rounded-full border-2 border-surface"></div>
                 </div>
                 <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-surface-container-high p-3 rounded-xl shadow-2xl min-w-[140px] border border-outline-variant/30 opacity-0 group-hover:opacity-100 transition-all z-20 pointer-events-none">
-                  <p className="text-[10px] uppercase tracking-widest text-[#FFB300] font-bold">Kutch</p>
+                  <p className="text-[10px] uppercase tracking-widest text-secondary font-bold">Kutch</p>
                   <p className="text-xs text-foreground mt-1">Embroidery Orders</p>
                   <div className="mt-2 h-1 w-full bg-surface-container-lowest rounded-full overflow-hidden">
                     <div className="h-full bg-indigo-400 w-[64%]"></div>
@@ -172,7 +175,7 @@ export default function MarketPage() {
                 </div>
 
                 {/* Chat Card 2 */}
-                <div className="bg-surface p-5 rounded-2xl border-l-4 border-[#FFB300] shadow-sm group">
+                <div className="bg-surface p-5 rounded-2xl border-l-4 border-secondary shadow-sm group">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full overflow-hidden bg-surface-container">
@@ -197,7 +200,7 @@ export default function MarketPage() {
                     &quot;Can you verify the indigo shade for the border? I want to ensure it matches your digital specs.&quot;
                   </div>
                   <div className="mt-3 flex justify-end gap-2 items-center">
-                    <CheckCheck className="w-3 h-3 text-[#FFB300]" />
+                    <CheckCheck className="w-3 h-3 text-secondary" />
                     <p className="text-[10px] text-muted-foreground">Read 2m ago</p>
                   </div>
                 </div>
@@ -250,10 +253,20 @@ export default function MarketPage() {
                     <h4 className="font-serif font-extrabold text-xl text-foreground line-clamp-1 group-hover:text-primary transition-colors">{item.name}</h4>
                     <p className="text-sm text-muted-foreground line-clamp-2 mt-3 leading-relaxed font-medium">{item.description}</p>
                   </div>
-                  <div className="mt-6 pt-4 border-t border-outline-variant/10">
-                    <button onClick={() => router.push(`/checkout/${item.id}`)} className="w-full flex items-center justify-center gap-3 bg-foreground hover:bg-primary text-background hover:text-white py-3.5 rounded-2xl font-bold text-sm tracking-tight active:scale-95 transition-all shadow-md">
-                      <ShoppingCart className="w-5 h-5" />
-                      Buy Reserve
+                  <div className="mt-6 pt-4 border-t border-outline-variant/10 flex gap-3">
+                    <button 
+                      onClick={() => addToCart(item)} 
+                      className="flex-1 flex items-center justify-center gap-2 border-2 border-primary text-primary hover:bg-primary hover:text-white py-3 rounded-2xl font-bold text-xs tracking-tight active:scale-95 transition-all"
+                    >
+                      <ShoppingCart className="w-4 h-4" />
+                      Add to Cart
+                    </button>
+                    <button 
+                      onClick={() => router.push(`/checkout/${item.id}`)} 
+                      className="flex-1 flex items-center justify-center gap-2 bg-foreground hover:bg-primary text-background hover:text-white py-3 rounded-2xl font-bold text-xs tracking-tight active:scale-95 transition-all shadow-md"
+                    >
+                      <Sparkles className="w-4 h-4" />
+                      Buy Now
                     </button>
                   </div>
                 </div>

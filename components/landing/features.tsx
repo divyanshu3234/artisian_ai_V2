@@ -19,7 +19,7 @@ export function Features() {
         
         <Card className="bg-surface-container border-outline-variant/30">
           <CardHeader>
-            <Globe className="w-8 h-8 text-[#FFB300] mb-4" />
+            <Globe className="w-8 h-8 text-secondary mb-4" />
             <CardTitle>Global Marketplace</CardTitle>
             <CardDescription>Reach buyers everywhere without middleman friction.</CardDescription>
           </CardHeader>

@@ -171,7 +171,7 @@ export default function ProfilePage() {
               {/* Form Fields with Hindi/English hybrid prompts */}
               <div className="group border-b border-outline-variant/30 py-4 flex justify-between items-end hover:border-secondary transition-colors">
                 <div className="space-y-1 w-full">
-                  <label className="text-xs uppercase tracking-widest text-[#FFB300] font-semibold">Artisan Name / नाम</label>
+                  <label className="text-xs uppercase tracking-widest text-secondary font-semibold">Artisan Name / नाम</label>
                   <input 
                     className="bg-transparent border-none p-0 text-3xl font-serif font-extrabold text-foreground focus:ring-0 w-full outline-none" 
                     type="text" 
@@ -184,7 +184,7 @@ export default function ProfilePage() {
 
               <div className="group border-b border-outline-variant/30 py-4 flex justify-between items-end hover:border-secondary transition-colors">
                 <div className="space-y-1 w-full">
-                  <label className="text-xs uppercase tracking-widest text-[#FFB300] font-semibold">Location / स्थान</label>
+                  <label className="text-xs uppercase tracking-widest text-secondary font-semibold">Location / स्थान</label>
                   <input 
                     className="bg-transparent border-none p-0 text-xl font-sans text-foreground focus:ring-0 w-full outline-none" 
                     type="text" 
@@ -197,7 +197,7 @@ export default function ProfilePage() {
 
               <div className="group border-b border-outline-variant/30 py-4 flex justify-between items-end hover:border-secondary transition-colors">
                 <div className="space-y-1 w-full relative">
-                  <label className="text-xs uppercase tracking-widest text-[#FFB300] font-semibold">Primary Craft / मुख्य शिल्प</label>
+                  <label className="text-xs uppercase tracking-widest text-secondary font-semibold">Primary Craft / मुख्य शिल्प</label>
                   <input 
                     className="bg-transparent border-none p-0 text-xl font-sans text-foreground focus:ring-0 w-full outline-none" 
                     type="text" 
@@ -231,16 +231,16 @@ export default function ProfilePage() {
 
             {/* Stats Bento Grid */}
             <div className="grid grid-cols-2 gap-6">
-              <div className="bg-surface-container p-8 rounded-xl flex flex-col justify-between aspect-square group hover:bg-[#FFB300]/5 transition-colors border border-outline-variant/10">
-                <Box className="text-[#FFB300] w-10 h-10" />
+              <div className="bg-surface-container p-8 rounded-xl flex flex-col justify-between aspect-square group hover:bg-secondary/5 transition-colors border border-outline-variant/10">
+                <Box className="text-secondary w-10 h-10" />
                 <div>
                   <p className="text-4xl font-serif font-extrabold text-foreground">42</p>
                   <p className="text-sm uppercase tracking-wider text-muted-foreground">Collections</p>
                 </div>
               </div>
 
-              <div className="bg-surface-container p-8 rounded-xl flex flex-col justify-between aspect-square group hover:bg-[#FFB300]/5 transition-colors border border-outline-variant/10">
-                <Star className="text-[#FFB300] w-10 h-10" fill="currentColor" />
+              <div className="bg-surface-container p-8 rounded-xl flex flex-col justify-between aspect-square group hover:bg-secondary/5 transition-colors border border-outline-variant/10">
+                <Star className="text-secondary w-10 h-10" fill="currentColor" />
                 <div>
                   <p className="text-4xl font-serif font-extrabold text-foreground">4.9</p>
                   <p className="text-sm uppercase tracking-wider text-muted-foreground">Global Rating</p>
